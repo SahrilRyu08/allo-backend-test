@@ -9,10 +9,23 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class FinanceDataCache {
     private final AtomicReference<List<?>> latestIdrRates = new AtomicReference<>();
+    private final AtomicReference<List<?>> historyIdrUsd = new AtomicReference<>();
 
     public void setLatestIdrRates(List<?> data) {
         setOnce(latestIdrRates, data);
     }
+
+    public List<?> getLatestIdrRate() {
+        return getOrThrow(latestIdrRates, "latest_idr_rates");
+    }
+
+    public void setHistoryIdrUsd(List<?> data) {
+        setOnce(historyIdrUsd, data);
+    }
+    public List<?> getHistoricalIdrUsd() {
+        return getOrThrow(historyIdrUsd, "history_idr_usd");
+    }
+
 
     private void setOnce(AtomicReference<List<?>> reference, List<?> data) {
         Objects.requireNonNull(data, "data must not be null");
@@ -22,10 +35,6 @@ public class FinanceDataCache {
         }
     }
 
-    public List<?> getLatestIdrRate() {
-        return getOrThrow(latestIdrRates, "latest_idr_rates");
-    }
-
     private List<?> getOrThrow(AtomicReference<List<?>> reference, String name) {
         List<?> data = reference.get();
         if (data == null) {
@@ -33,4 +42,6 @@ public class FinanceDataCache {
         }
         return data;
     }
+
+
 }
