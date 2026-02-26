@@ -37,9 +37,12 @@ public class LatestIdrRatesFetcher implements IdrDataFetcher{
         BigDecimal rateUsd = rates.get("USD");
         if (rateUsd == null || BigDecimal.ZERO.compareTo(rateUsd) == 0) {
             cache.setLatestIdrRates(List.of());
+            return;
         }
         BigDecimal spreadFactor = spreadFactorCalculator.calculateSpreadFactor();
-        BigDecimal usdbuySpreadIdr = BigDecimal.ONE.divide(rateUsd, 8, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.ONE.add(spreadFactor));
+        BigDecimal usdbuySpreadIdr = BigDecimal.ONE
+                .divide(rateUsd, 8, BigDecimal.ROUND_HALF_UP)
+                .multiply(BigDecimal.ONE.add(spreadFactor));
         LatestIdrRateResult result = new LatestIdrRateResult(
                 response.getBase(),
                 response.getDate(),
