@@ -1,0 +1,36 @@
+package org.allobank.com.finanacedataservice.service;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
+@Service
+public class FinanceDataCache {
+    private final AtomicReference<List<?>> latestIdrRates = new AtomicReference<>();
+
+    public void setLatestIdrRates(List<?> data) {
+        setOnce(latestIdrRates, data);
+    }
+
+    private void setOnce(AtomicReference<List<?>> reference, List<?> data) {
+        Objects.requireNonNull(data, "data must not be null");
+        List<?> immutableCopy = List.copyOf(data);
+        if (!reference.compareAndSet(null, immutableCopy)) {
+            throw  new IllegalStateException("Data has already been initial");
+        }
+    }
+
+    public List<?> getLatestIdrRate() {
+        return getOrThrow(latestIdrRates, "latest_idr_rates");
+    }
+
+    private List<?> getOrThrow(AtomicReference<List<?>> reference, String name) {
+        List<?> data = reference.get();
+        if (data == null) {
+            throw new IllegalStateException("Data for resource " + name+ " not init");
+        }
+        return data;
+    }
+}
