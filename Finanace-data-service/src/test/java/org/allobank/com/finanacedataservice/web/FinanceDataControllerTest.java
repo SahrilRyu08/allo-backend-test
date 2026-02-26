@@ -28,15 +28,41 @@ class FinanceDataControllerTest {
     private FinanceDataCache cache;
     @MockitoBean(name = "latest_idr_rates")
     private IdrDataFetcher latestIdrRatesFetcher;
+    @MockitoBean(name = "historical_idr_usd")
+    private IdrDataFetcher historicalIdrUsd;
+    @MockitoBean(name = "supported_currencies")
+    private IdrDataFetcher supported_currencies;
 
     @Test
-    void returnDataForKownResourtype() throws Exception {
-        List<?> data = List.of("value");
+    void returnDataForLatestIdrRates() throws Exception {
+        List<?> data = List.of("latest_idr_value");
         when(latestIdrRatesFetcher.getCachedData(cache)).thenAnswer(invocationOnMock -> data);
 
         mockMvc.perform(get("/api/finance/data/latest_idr_rates"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0]").value("value"));
+                .andExpect(jsonPath("$[0]").value("latest_idr_value"));
+
+    }
+
+    @Test
+    void returnDataForHistoricalIdrUsd() throws Exception {
+        List<?> data = List.of("historical_value");
+        when(historicalIdrUsd.getCachedData(cache)).thenAnswer(invocationOnMock -> data);
+
+        mockMvc.perform(get("/api/finance/data/historical_idr_usd"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]").value("historical_value"));
+
+    }
+
+    @Test
+    void returnDataForSupportedCurrencies() throws Exception {
+        List<?> data = List.of("supported_currency_value");
+        when(supported_currencies.getCachedData(cache)).thenAnswer(invocationOnMock -> data);
+
+        mockMvc.perform(get("/api/finance/data/supported_currencies"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]").value("supported_currency_value"));
 
     }
 
@@ -46,4 +72,6 @@ class FinanceDataControllerTest {
         mockMvc.perform(get("/api/finance/data/unkown"))
                 .andExpect(status().isNotFound());
     }
+
+
 }
