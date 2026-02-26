@@ -43,4 +43,13 @@ public class FrankfurterClient {
             throw ex;
         }
     }
+
+    public Map<String, String> getSupportedCurrencies() {
+        try {
+            ResponseEntity<Map> response = restTemplate.getForEntity("/currencies", Map.class);
+            return (Map<String, String>) response.getBody();
+        } catch (RestClientException exception) {
+            throw exception;
+        }
+    }
 }
