@@ -14,7 +14,7 @@ public class FrankfurterClient {
     }
 
     public FrankfurterLatestResponse getLatestIdrRates() {
-        ResponseEntity<FrankfurterLatestResponse> response = restTemplate.getForEntity("/latest/base=IDR", FrankfurterLatestResponse.class);
+        ResponseEntity<FrankfurterLatestResponse> response = restTemplate.getForEntity("/latest?base=IDR", FrankfurterLatestResponse.class);
         return response.getBody();
     }
 }

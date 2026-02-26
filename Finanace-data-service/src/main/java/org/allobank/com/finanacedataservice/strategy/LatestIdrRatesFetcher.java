@@ -40,14 +40,13 @@ public class LatestIdrRatesFetcher implements IdrDataFetcher{
             return;
         }
         BigDecimal spreadFactor = spreadFactorCalculator.calculateSpreadFactor();
-        BigDecimal usdbuySpreadIdr = BigDecimal.ONE
-                .divide(rateUsd, 8, BigDecimal.ROUND_HALF_UP)
+        BigDecimal usdBuySpreadIdr = BigDecimal.ONE.divide(rateUsd, 8, BigDecimal.ROUND_HALF_UP)
                 .multiply(BigDecimal.ONE.add(spreadFactor));
         LatestIdrRateResult result = new LatestIdrRateResult(
                 response.getBase(),
                 response.getDate(),
                 rateUsd,
-                usdbuySpreadIdr,
+                usdBuySpreadIdr,
                 spreadFactor
         );
         cache.setLatestIdrRates(List.of(result));
